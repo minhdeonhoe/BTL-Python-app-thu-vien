@@ -1,13 +1,6 @@
--- ==========================================================
--- SCRIPT KHỞI TẠO CƠ SỞ DỮ LIỆU QUẢN LÝ THƯ VIỆN (SQL SERVER)
--- Hỗ trợ Xóa Mềm (Soft Delete) & Bảo vệ toàn vẹn lịch sử
--- File: database/library.sql
--- ==========================================================
 
 USE master;
 GO
-
--- Xóa database cũ nếu đã tồn tại để làm mới (Cẩn thận khi dùng thực tế)
 IF EXISTS (SELECT name FROM sys.databases WHERE name = N'LibraryManagementDB')
 BEGIN
     ALTER DATABASE LibraryManagementDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
@@ -15,18 +8,13 @@ BEGIN
 END
 GO
 
--- 1. Tạo Database mới
+
 CREATE DATABASE LibraryManagementDB;
 GO
 
 USE LibraryManagementDB;
 GO
 
--- ==========================================================
--- 2. TẠO CÁC BẢNG (TABLES) TƯƠNG ỨNG VỚI THƯ MỤC MODELS/
--- ==========================================================
-
--- 2.1. Bảng Users (Tài khoản hệ thống)
 CREATE TABLE Users (
     user_id INT IDENTITY(1,1) PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
@@ -34,12 +22,12 @@ CREATE TABLE Users (
     full_name NVARCHAR(100) NOT NULL,
     email VARCHAR(100),
     role VARCHAR(20) NOT NULL DEFAULT 'Librarian' CHECK (role IN ('Admin', 'Librarian')),
-    is_active BIT NOT NULL DEFAULT 1, -- 1: Đang hoạt động, 0: Đã vô hiệu hóa
+    is_active BIT NOT NULL DEFAULT 1, 
     created_at DATETIME DEFAULT GETDATE()
 );
 GO
 
--- 2.2. Bảng Books (Quản lý sách)
+
 CREATE TABLE Books (
     book_id INT IDENTITY(1,1) PRIMARY KEY,
     isbn VARCHAR(20) UNIQUE,
@@ -51,13 +39,13 @@ CREATE TABLE Books (
     total_quantity INT NOT NULL DEFAULT 0 CHECK (total_quantity >= 0),
     available_quantity INT NOT NULL DEFAULT 0 CHECK (available_quantity >= 0),
     location NVARCHAR(50), 
-    is_active BIT NOT NULL DEFAULT 1, -- Cờ xóa mềm: 1=Hiển thị, 0=Đã bị xóa/ẩn
+    is_active BIT NOT NULL DEFAULT 1, 
     created_at DATETIME DEFAULT GETDATE(),
     CONSTRAINT CHK_Book_Quantity CHECK (available_quantity <= total_quantity)
 );
 GO
 
--- 2.3. Bảng Readers (Quản lý độc giả)
+
 CREATE TABLE Readers (
     reader_id INT IDENTITY(1,1) PRIMARY KEY,
     card_number VARCHAR(20) NOT NULL UNIQUE, 
@@ -68,12 +56,11 @@ CREATE TABLE Readers (
     email VARCHAR(100),
     address NVARCHAR(255),
     status NVARCHAR(20) NOT NULL DEFAULT N'Hoạt động' CHECK (status IN (N'Hoạt động', N'Khóa thẻ')),
-    is_active BIT NOT NULL DEFAULT 1, -- Cờ xóa mềm: 1=Hiển thị, 0=Đã bị xóa/ẩn
+    is_active BIT NOT NULL DEFAULT 1,
     created_at DATETIME DEFAULT GETDATE()
 );
 GO
 
--- 2.4. Bảng Borrows (Lịch sử mượn trả)
 CREATE TABLE Borrows (
     borrow_id INT IDENTITY(1,1) PRIMARY KEY,
     reader_id INT NOT NULL,
@@ -87,16 +74,12 @@ CREATE TABLE Borrows (
     fine_amount DECIMAL(10, 2) DEFAULT 0 CHECK (fine_amount >= 0), 
     note NVARCHAR(255),
 
-    -- Đã bỏ ON DELETE CASCADE. Từ giờ không được dùng lệnh DELETE thẳng nếu đã có lịch sử.
     CONSTRAINT FK_Borrows_Readers FOREIGN KEY (reader_id) REFERENCES Readers(reader_id),
     CONSTRAINT FK_Borrows_Books FOREIGN KEY (book_id) REFERENCES Books(book_id),
     CONSTRAINT FK_Borrows_Users FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
 GO
 
--- ==========================================================
--- 3. THÊM DỮ LIỆU MẪU (SEED DATA)
--- ==========================================================
 
 INSERT INTO Users (username, password_hash, full_name, email, role) VALUES
 ('admin', '123456', N'Nguyễn Quản Trị', 'admin@library.edu.vn', 'Admin'),

@@ -2,8 +2,6 @@ import os
 import pyodbc
 from dotenv import load_dotenv
 from contextlib import contextmanager
-
-# Đọc cấu hình từ file .env
 load_dotenv()
 
 class DatabaseConnection:
