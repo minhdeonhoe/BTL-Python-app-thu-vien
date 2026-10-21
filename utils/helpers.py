@@ -14,7 +14,6 @@ def center_window(window, width: int, height: int):
 
 
 def format_date(val) -> str:
-    """Định dạng ngày sang chuỗi DD/MM/YYYY hoặc YYYY-MM-DD"""
     if not val:
         return ""
     if isinstance(val, (date, datetime)):
