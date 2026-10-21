@@ -4,7 +4,6 @@ from models.user import User
 
 
 class UserDAO:
-    """Tầng truy cập dữ liệu (DAO) cho bảng Users"""
 
     @staticmethod
     def get_by_credentials(username: str, password_hash: str) -> Optional[User]:
@@ -92,7 +91,7 @@ class UserDAO:
             query += " AND role LIKE ?"
             params.append(f"%{role_filter}%")
 
-        query += " ORDER BY user_id DESC"
+        query += " ORDER BY user_id ASC"
 
         users = []
         with get_db_cursor() as cursor:

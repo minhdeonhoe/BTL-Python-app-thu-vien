@@ -79,8 +79,8 @@ class CreateBorrowDialog(ctk.CTkToplevel):
         self.book_cb.grid(row=3, column=1, sticky="ew", pady=6)
 
         # Hạn trả (mặc định +14 ngày)
-        default_due = (date.today() + timedelta(days=14)).strftime("%Y-%m-%d")
-        ctk.CTkLabel(form_grid, text="Hạn trả (YYYY-MM-DD):", font=input_font).grid(row=4, column=0, sticky="w", pady=6, padx=(0, 12))
+        default_due = (date.today() + timedelta(days=14)).strftime("%d-%m-%Y")
+        ctk.CTkLabel(form_grid, text="Hạn trả (DD-MM-YYYY):", font=input_font).grid(row=4, column=0, sticky="w", pady=6, padx=(0, 12))
         self.due_entry = ctk.CTkEntry(form_grid, height=34, font=input_font)
         self.due_entry.insert(0, default_due)
         self.due_entry.grid(row=4, column=1, sticky="ew", pady=6)
@@ -162,12 +162,12 @@ class CreateBorrowDialog(ctk.CTkToplevel):
             return
 
         try:
-            due_date = datetime.strptime(due_str, "%Y-%m-%d").date()
+            due_date = datetime.strptime(due_str, "%d-%m-%Y").date()
             if due_date < date.today():
                 messagebox.showwarning("Ngày không hợp lệ", "Hạn trả không được nhỏ hơn ngày hôm nay!", parent=self)
                 return
         except ValueError:
-            messagebox.showwarning("Sai định dạng", "Hạn trả phải theo định dạng YYYY-MM-DD!", parent=self)
+            messagebox.showwarning("Sai định dạng", "Hạn trả phải theo định dạng DD-MM-YYYY (VD: 25-10-2026)!", parent=self)
             return
 
         try:
@@ -175,7 +175,7 @@ class CreateBorrowDialog(ctk.CTkToplevel):
                 reader_id=reader_id,
                 book_id=book_id,
                 user_id=self.current_user.user_id,
-                due_date=due_str,
+                due_date=due_date.strftime("%Y-%m-%d"),
                 note=note,
             )
             messagebox.showinfo("Thành công", "Đã tạo phiếu mượn sách thành công!", parent=self)

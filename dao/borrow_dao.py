@@ -5,7 +5,6 @@ from models.borrow import Borrow
 
 
 class BorrowDAO:
-    """Tầng truy cập dữ liệu (DAO) cho bảng Borrows và thống kê"""
 
     @staticmethod
     def get_all(keyword: str = "", status_filter: str = "Tất cả") -> List[Borrow]:
@@ -40,7 +39,7 @@ class BorrowDAO:
             query += " AND b.status LIKE ?"
             params.append(f"%{status_filter}%")
 
-        query += " ORDER BY b.borrow_id DESC"
+        query += " ORDER BY b.borrow_id ASC"
 
         borrows = []
         with get_db_cursor() as cursor:
@@ -81,7 +80,7 @@ class BorrowDAO:
             JOIN Books bk ON b.book_id = bk.book_id
             JOIN Users u ON b.user_id = u.user_id
             WHERE b.reader_id = ?
-            ORDER BY b.borrow_id DESC
+            ORDER BY b.borrow_id ASC
         """
         borrows = []
         with get_db_cursor() as cursor:
@@ -137,7 +136,6 @@ class BorrowDAO:
     def insert_borrow_and_decrease_stock(
         reader_id: int, book_id: int, user_id: int, due_date: str, note: Optional[str] = None
     ) -> None:
-        """Thêm bản ghi phiếu mượn và giảm số lượng sách sẵn có trong cùng 1 transaction"""
         insert_sql = """
             INSERT INTO Borrows (reader_id, book_id, user_id, borrow_date, due_date, status, fine_amount, note)
             VALUES (?, ?, ?, CAST(GETDATE() AS DATE), ?, N'Đang mượn', 0, ?)
@@ -160,7 +158,6 @@ class BorrowDAO:
         note: Optional[str] = None,
         restore_stock: bool = True,
     ) -> None:
-        """Cập nhật phiếu mượn khi trả/báo mất sách và hoàn lại số lượng kho trong cùng 1 transaction"""
         update_borrow_sql = """
             UPDATE Borrows
             SET return_date = CAST(GETDATE() AS DATE),

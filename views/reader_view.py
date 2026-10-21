@@ -10,7 +10,7 @@ from utils.helpers import apply_treeview_style, center_window, format_currency, 
 
 
 class ReaderBorrowHistoryDialog(ctk.CTkToplevel):
-    """Hộp thoại kiểm tra thông tin chi tiết của Độc giả và Lịch sử mượn trả"""
+   
 
     def __init__(self, master, reader: Reader):
         super().__init__(master)
@@ -122,7 +122,6 @@ class ReaderBorrowHistoryDialog(ctk.CTkToplevel):
 
 
 class ReaderFormDialog(ctk.CTkToplevel):
-    """Hộp thoại Thêm mới / Cập nhật thông tin Độc giả (Chỉ dành cho Admin)"""
 
     def __init__(self, master, on_save_callback, reader: Optional[Reader] = None):
         super().__init__(master)
@@ -170,16 +169,16 @@ class ReaderFormDialog(ctk.CTkToplevel):
         self.gender_cb.set("Nam")
         self.gender_cb.grid(row=2, column=1, sticky="ew", pady=6)
 
-        ctk.CTkLabel(form_grid, text="Ngày sinh (YYYY-MM-DD):", font=input_font).grid(row=3, column=0, sticky="w", pady=6, padx=(0, 12))
-        self.dob_entry = ctk.CTkEntry(form_grid, placeholder_text="VD: 2004-05-15", height=34, font=input_font)
+        ctk.CTkLabel(form_grid, text="Ngày sinh (DD-MM-YYYY):", font=input_font).grid(row=3, column=0, sticky="w", pady=6, padx=(0, 12))
+        self.dob_entry = ctk.CTkEntry(form_grid, placeholder_text="VD: 15-05-2004", height=34, font=input_font)
         self.dob_entry.grid(row=3, column=1, sticky="ew", pady=6)
 
         ctk.CTkLabel(form_grid, text="Số điện thoại (*):", font=input_font).grid(row=4, column=0, sticky="w", pady=6, padx=(0, 12))
         self.phone_entry = ctk.CTkEntry(form_grid, placeholder_text="VD: 0901234567", height=34, font=input_font)
         self.phone_entry.grid(row=4, column=1, sticky="ew", pady=6)
 
-        ctk.CTkLabel(form_grid, text="Email:", font=input_font).grid(row=5, column=0, sticky="w", pady=6, padx=(0, 12))
-        self.email_entry = ctk.CTkEntry(form_grid, placeholder_text="VD: sv@student.edu.vn", height=34, font=input_font)
+        ctk.CTkLabel(form_grid, text="Email (*):", font=input_font).grid(row=5, column=0, sticky="w", pady=6, padx=(0, 12))
+        self.email_entry = ctk.CTkEntry(form_grid, placeholder_text="VD: example@gmail.com", height=34, font=input_font)
         self.email_entry.grid(row=5, column=1, sticky="ew", pady=6)
 
         ctk.CTkLabel(form_grid, text="Địa chỉ:", font=input_font).grid(row=6, column=0, sticky="w", pady=6, padx=(0, 12))
@@ -241,14 +240,28 @@ class ReaderFormDialog(ctk.CTkToplevel):
             )
             return
 
+        if (
+            not email
+            or not email.lower().endswith("@gmail.com")
+            or email.count("@") != 1
+            or email.startswith("@")
+            or " " in email
+        ):
+            messagebox.showwarning(
+                "Sai định dạng Email",
+                "Email bắt buộc phải có đuôi @gmail.com (VD: example@gmail.com)!",
+                parent=self,
+            )
+            return
+
         dob_val = None
         if dob_str:
             try:
-                dob_val = datetime.strptime(dob_str, "%Y-%m-%d").date()
+                dob_val = datetime.strptime(dob_str, "%d-%m-%Y").date()
             except ValueError:
                 messagebox.showwarning(
                     "Sai định dạng ngày",
-                    "Ngày sinh phải có định dạng YYYY-MM-DD (VD: 2004-05-15)!",
+                    "Ngày sinh phải có định dạng DD-MM-YYYY (VD: 15-05-2004)!",
                     parent=self,
                 )
                 return
@@ -280,11 +293,6 @@ class ReaderFormDialog(ctk.CTkToplevel):
 
 
 class ReaderView(ctk.CTkFrame):
-    """
-    Màn hình Độc giả / Người dùng:
-    - Admin: Quản lý toàn bộ (Thêm, Sửa, Xóa độc giả + Xem lịch sử mượn trả)
-    - Librarian (Thủ thư): Chỉ được tra cứu người dùng và kiểm tra lịch sử mượn trả
-    """
 
     def __init__(self, master, current_user: User):
         super().__init__(master, fg_color="transparent")
@@ -306,7 +314,6 @@ class ReaderView(ctk.CTkFrame):
         )
         title_lbl.pack(side="left")
 
-        # Nút kiểm tra lịch sử mượn trả của độc giả (Cả Admin và Thủ thư đều dùng được)
         history_btn = ctk.CTkButton(
             top_bar,
             text="📜 Xem lịch sử mượn trả",
@@ -317,8 +324,6 @@ class ReaderView(ctk.CTkFrame):
             command=self._view_reader_history,
         )
         history_btn.pack(side="right", padx=(8, 0))
-
-        # Chỉ Admin mới được quản lý (Thêm / Sửa / Xóa) tài khoản độc giả
         if self.is_admin:
             del_btn = ctk.CTkButton(
                 top_bar,
@@ -351,7 +356,6 @@ class ReaderView(ctk.CTkFrame):
             )
             add_btn.pack(side="right")
 
-        # Thanh tìm kiếm & lọc
         filter_bar = ctk.CTkFrame(self, corner_radius=10)
         filter_bar.pack(fill="x", pady=(0, 12), ipady=6)
 
@@ -398,7 +402,6 @@ class ReaderView(ctk.CTkFrame):
             command=self._reset_filters,
         ).pack(side="left")
 
-        # Bảng Treeview
         table_frame = ctk.CTkFrame(self, corner_radius=10)
         table_frame.pack(fill="both", expand=True)
 
@@ -429,7 +432,6 @@ class ReaderView(ctk.CTkFrame):
             self.tree.column(col, width=width, anchor=anchor)
 
         self.tree.tag_configure("alt", background=row_alt)
-        # Nhấp đúp chuột: Admin mở form sửa, Thủ thư mở bảng xem lịch sử mượn trả
         self.tree.bind(
             "<Double-1>",
             lambda _: self._edit_selected() if self.is_admin else self._view_reader_history(),

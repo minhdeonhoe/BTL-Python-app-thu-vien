@@ -7,6 +7,17 @@ from models.book import Book
 class BookService:
     """Tầng xử lý nghiệp vụ quản lý Sách (chỉ gọi qua BookDAO)"""
 
+    # Danh sách vị trí kệ mặc định của thư viện
+    SHELF_LOCATIONS = ["A1", "A2", "B1", "B2", "C1", "C2"]
+
+    @staticmethod
+    def normalize_location(location: str) -> str:
+        """Chuẩn hóa vị trí kệ (VD: 'Kệ A1', 'a1' -> 'A1')"""
+        loc = (location or "").strip().upper()
+        if loc.startswith("KỆ"):
+            loc = loc[2:].strip()
+        return loc
+
     @staticmethod
     def get_all_books(keyword: str = "", category: str = "Tất cả") -> List[Book]:
         return BookDAO.get_all(keyword=keyword.strip(), category=category)
@@ -22,10 +33,13 @@ class BookService:
         book.author = (book.author or "").strip()
         book.category = (book.category or "").strip()
         book.publisher = (book.publisher or "").strip()
-        book.location = (book.location or "").strip()
+        book.location = BookService.normalize_location(book.location)
 
         if not book.title or not book.author or not book.category:
             raise ValueError("Tên sách, Tác giả và Thể loại không được để trống!")
+
+        if book.location not in BookService.SHELF_LOCATIONS:
+            raise ValueError(f"Vị trí kệ phải là một trong: {', '.join(BookService.SHELF_LOCATIONS)}!")
 
         if book.publish_year is not None:
             current_year = datetime.now().year

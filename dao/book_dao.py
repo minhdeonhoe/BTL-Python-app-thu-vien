@@ -4,7 +4,6 @@ from models.book import Book
 
 
 class BookDAO:
-    """Tầng truy cập dữ liệu (DAO) cho bảng Books"""
 
     @staticmethod
     def get_all(keyword: str = "", category: str = "Tất cả") -> List[Book]:
@@ -33,7 +32,7 @@ class BookDAO:
             query += " AND category LIKE ?"
             params.append(f"%{category}%")
 
-        query += " ORDER BY book_id DESC"
+        query += " ORDER BY book_id ASC"
 
         books = []
         with get_db_cursor() as cursor:

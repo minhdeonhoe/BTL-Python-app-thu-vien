@@ -50,7 +50,6 @@ class BookFormDialog(ctk.CTkToplevel):
             ("Năm xuất bản:", "year_entry", f"1901 - {datetime.now().year}"),
             ("Tổng số lượng (*):", "total_qty_entry", "Nhập số nguyên >= 0"),
             ("Số lượng sẵn có (*):", "avail_qty_entry", "Nhập số nguyên <= Tổng SL"),
-            ("Vị trí kệ:", "location_entry", "VD: Kệ A1"),
         ]
 
         self.entries = {}
@@ -71,6 +70,25 @@ class BookFormDialog(ctk.CTkToplevel):
             )
             entry.grid(row=idx, column=1, sticky="ew", pady=6)
             self.entries[attr_name] = entry
+
+        # Vị trí kệ: chỉ cho chọn trong 6 kệ mặc định
+        shelf_row = len(fields)
+        ctk.CTkLabel(
+            form_grid,
+            text="Vị trí kệ (*):",
+            font=ctk.CTkFont(family="Segoe UI", size=13, weight="normal"),
+            anchor="w",
+        ).grid(row=shelf_row, column=0, sticky="w", pady=6, padx=(0, 12))
+
+        self.location_cb = ctk.CTkComboBox(
+            form_grid,
+            values=BookService.SHELF_LOCATIONS,
+            state="readonly",
+            height=34,
+            font=ctk.CTkFont(family="Segoe UI", size=13, weight="normal"),
+        )
+        self.location_cb.set(BookService.SHELF_LOCATIONS[0])
+        self.location_cb.grid(row=shelf_row, column=1, sticky="ew", pady=6)
 
         # Nút bấm
         btn_frame = ctk.CTkFrame(container, fg_color="transparent")
@@ -106,7 +124,9 @@ class BookFormDialog(ctk.CTkToplevel):
             self.entries["year_entry"].insert(0, str(b.publish_year))
         self.entries["total_qty_entry"].insert(0, str(b.total_quantity))
         self.entries["avail_qty_entry"].insert(0, str(b.available_quantity))
-        self.entries["location_entry"].insert(0, b.location or "")
+        location = BookService.normalize_location(b.location)
+        if location in BookService.SHELF_LOCATIONS:
+            self.location_cb.set(location)
 
     def _handle_save(self):
         isbn = self.entries["isbn_entry"].get().strip()
@@ -117,7 +137,7 @@ class BookFormDialog(ctk.CTkToplevel):
         year_str = self.entries["year_entry"].get().strip()
         total_str = self.entries["total_qty_entry"].get().strip()
         avail_str = self.entries["avail_qty_entry"].get().strip()
-        location = self.entries["location_entry"].get().strip()
+        location = self.location_cb.get().strip()
 
         if not title or not author or not category:
             messagebox.showwarning("Thiếu dữ liệu", "Vui lòng nhập đầy đủ Tên sách, Tác giả và Thể loại!", parent=self)

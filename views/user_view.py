@@ -60,8 +60,8 @@ class UserFormDialog(ctk.CTkToplevel):
         self.fullname_entry.grid(row=2, column=1, sticky="ew", pady=7)
 
         # Email
-        ctk.CTkLabel(form_grid, text="Email:", font=input_font).grid(row=3, column=0, sticky="w", pady=7, padx=(0, 12))
-        self.email_entry = ctk.CTkEntry(form_grid, placeholder_text="VD: staff@library.edu.vn", height=34, font=input_font)
+        ctk.CTkLabel(form_grid, text="Email (*):", font=input_font).grid(row=3, column=0, sticky="w", pady=7, padx=(0, 12))
+        self.email_entry = ctk.CTkEntry(form_grid, placeholder_text="VD: staff@gmail.com", height=34, font=input_font)
         self.email_entry.grid(row=3, column=1, sticky="ew", pady=7)
 
         # Vai trò (Role) - Khóa chuyển quyền (Admin không được chuyển quyền của mình hoặc tạo thêm Admin)
@@ -111,13 +111,28 @@ class UserFormDialog(ctk.CTkToplevel):
     def _handle_save(self):
         fixed_role = "Admin" if self.is_editing_admin else "Librarian"
         is_active_val = True if self.is_editing_admin else (self.status_cb.get() == "Đang hoạt động")
+        email = self.email_entry.get().strip()
+
+        if (
+            not email
+            or not email.lower().endswith("@gmail.com")
+            or email.count("@") != 1
+            or email.startswith("@")
+            or " " in email
+        ):
+            messagebox.showwarning(
+                "Sai định dạng Email",
+                "Email bắt buộc phải có đuôi @gmail.com (VD: staff@gmail.com)!",
+                parent=self,
+            )
+            return
 
         user_obj = User(
             user_id=self.target_user.user_id if self.is_edit else None,
             username=self.username_entry.get().strip(),
             password_hash=self.password_entry.get().strip(),
             full_name=self.fullname_entry.get().strip(),
-            email=self.email_entry.get().strip(),
+            email=email,
             role=fixed_role,
             is_active=is_active_val,
         )

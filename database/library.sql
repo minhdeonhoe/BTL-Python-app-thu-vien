@@ -82,21 +82,21 @@ GO
 
 
 INSERT INTO Users (username, password_hash, full_name, email, role) VALUES
-('admin', '123456', N'Nguyễn Quản Trị', 'admin@library.edu.vn', 'Admin'),
-('thuthu1', '123456', N'Trần Thị Thu Thủy', 'thuytt@library.edu.vn', 'Librarian'),
-('thuthu2', '123456', N'Lê Văn Nam', 'namlv@library.edu.vn', 'Librarian');
+('admin', '123456', N'Nguyễn Quản Trị', 'admin@gmail.com', 'Admin'),
+('thuthu1', '123456', N'Trần Thị Thu Thủy', 'thuytt@gmail.com', 'Librarian'),
+('thuthu2', '123456', N'Lê Văn Nam', 'namlv@gmail.com', 'Librarian');
 
 INSERT INTO Books (isbn, title, author, category, publisher, publish_year, total_quantity, available_quantity, location) VALUES
-('978-604-1-12345', N'Lập trình Python cơ bản', N'Nguyễn Văn A', N'Công nghệ thông tin', N'NXB Giáo Dục', 2023, 15, 14, N'Kệ A1'),
-('978-604-2-54321', N'Cấu trúc dữ liệu', N'Lê Minh Hoàng', N'Công nghệ thông tin', N'NXB ĐHQG', 2022, 10, 9, N'Kệ A1'),
-('978-604-3-67890', N'Cơ sở dữ liệu SQL', N'Trần Trọng B', N'Công nghệ thông tin', N'NXB KHKT', 2021, 12, 12, N'Kệ A2'),
-('978-604-4-11223', N'Đắc Nhân Tâm', N'Dale Carnegie', N'Kỹ năng sống', N'NXB Tổng Hợp', 2020, 20, 20, N'Kệ B1'),
-('978-604-5-99887', N'Nhà Giả Kim', N'Paulo Coelho', N'Văn học', N'NXB Hội Nhà Văn', 2021, 8, 7, N'Kệ C1');
+('978-604-1-12345', N'Lập trình Python cơ bản', N'Nguyễn Văn A', N'Công nghệ thông tin', N'NXB Giáo Dục', 2023, 15, 14, N'A1'),
+('978-604-2-54321', N'Cấu trúc dữ liệu', N'Lê Minh Hoàng', N'Công nghệ thông tin', N'NXB ĐHQG', 2022, 10, 9, N'A1'),
+('978-604-3-67890', N'Cơ sở dữ liệu SQL', N'Trần Trọng B', N'Công nghệ thông tin', N'NXB KHKT', 2021, 12, 12, N'A2'),
+('978-604-4-11223', N'Đắc Nhân Tâm', N'Dale Carnegie', N'Kỹ năng sống', N'NXB Tổng Hợp', 2020, 20, 20, N'B1'),
+('978-604-5-99887', N'Nhà Giả Kim', N'Paulo Coelho', N'Văn học', N'NXB Hội Nhà Văn', 2021, 8, 7, N'C1');
 
 INSERT INTO Readers (card_number, full_name, gender, dob, phone, email, address, status) VALUES
-('SV2024001', N'Phạm Minh Tuấn', N'Nam', '2004-05-15', '0901234567', 'tuanpm@student.edu.vn', N'Cầu Giấy, Hà Nội', N'Hoạt động'),
-('SV2024002', N'Hoàng Thu Trang', N'Nữ', '2005-08-20', '0912345678', 'tranght@student.edu.vn', N'Đống Đa, Hà Nội', N'Hoạt động'),
-('SV2024003', N'Ngô Kiến Huy', N'Nam', '2003-11-10', '0987654321', 'huynk@student.edu.vn', N'Thanh Xuân, Hà Nội', N'Khóa thẻ');
+('SV2024001', N'Phạm Minh Tuấn', N'Nam', '15-07-2006', '0901234567', 'tuanpm@gmail.com', N'Cầu Giấy, Hà Nội', N'Hoạt động'),
+('SV2024002', N'Hoàng Thu Trang', N'Nữ', '20-08-2005', '0912345678', 'tranght@gmail.com', N'Đống Đa, Hà Nội', N'Hoạt động'),
+('SV2024003', N'Ngô Kiến Huy', N'Nam', '10-11-2003', '0987654321', 'huynk@gmail.com', N'Thanh Xuân, Hà Nội', N'Khóa thẻ');
 
 INSERT INTO Borrows (reader_id, book_id, user_id, borrow_date, due_date, return_date, status, fine_amount, note) VALUES
 (1, 1, 2, '2025-02-01', '2025-02-15', NULL, N'Đang mượn', 0, N'Sách mới nguyên vẹn'),

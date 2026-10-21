@@ -30,7 +30,6 @@ class DatabaseConnection:
 
 @contextmanager
 def get_db_cursor(commit: bool = False):
-    """Context manager tự động mở kết nối, cấp cursor và đóng an toàn"""
     conn = DatabaseConnection.get_connection()
     cursor = conn.cursor()
     try:
