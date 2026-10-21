@@ -240,6 +240,16 @@ class ReaderFormDialog(ctk.CTkToplevel):
             )
             return
 
+        # Kiểm tra định dạng dữ liệu
+        # Kiểm tra số điện thoại đúng 10 chữ số
+        if not phone.isdigit() or len(phone) != 10:
+            messagebox.showwarning(
+                "Sai định dạng Số điện thoại",
+                "Số điện thoại bắt buộc phải gồm đúng 10 chữ số (VD: 0901234567)!",
+                parent=self,
+            )
+            return
+
         if (
             not email
             or not email.lower().endswith("@gmail.com")
