@@ -28,6 +28,15 @@ class AuthService:
         if not user.username or not user.password_hash or not user.full_name:
             raise ValueError("Tên đăng nhập, Mật khẩu và Họ tên không được để trống!")
 
+        if (
+            not user.email
+            or not user.email.lower().endswith("@gmail.com")
+            or user.email.count("@") != 1
+            or user.email.startswith("@")
+            or " " in user.email
+        ):
+            raise ValueError("Email không hợp lệ! Email bắt buộc phải có đuôi @gmail.com.")
+
         if user.role not in ("Admin", "Librarian"):
             raise ValueError("Quyền (Role) chỉ được phép là 'Admin' hoặc 'Librarian'!")
 

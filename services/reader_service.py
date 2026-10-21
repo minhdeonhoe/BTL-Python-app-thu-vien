@@ -21,6 +21,15 @@ class ReaderService:
         if not reader.card_number or not reader.full_name or not reader.phone:
             raise ValueError("Mã thẻ, Họ tên và Số điện thoại không được để trống!")
 
+        if (
+            not reader.email
+            or not reader.email.lower().endswith("@gmail.com")
+            or reader.email.count("@") != 1
+            or reader.email.startswith("@")
+            or " " in reader.email
+        ):
+            raise ValueError("Email không hợp lệ! Email bắt buộc phải có đuôi @gmail.com.")
+
         if reader.gender not in ("Nam", "Nữ", "Khác"):
             reader.gender = "Nam"
 

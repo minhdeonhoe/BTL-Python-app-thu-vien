@@ -10,7 +10,6 @@ from views.user_view import UserView
 
 
 class DashboardFrame(ctk.CTkFrame):
-    """Trang Tổng quan (Dashboard) hiển thị thẻ thống kê nhanh và các phiếu mượn mới nhất"""
 
     def __init__(self, master):
         super().__init__(master, fg_color="transparent")
@@ -37,7 +36,6 @@ class DashboardFrame(ctk.CTkFrame):
         )
         refresh_btn.pack(side="right")
 
-        # Hàng 4 thẻ thống kê (Stat Cards)
         cards_frame = ctk.CTkFrame(self, fg_color="transparent")
         cards_frame.pack(fill="x", pady=(0, 18))
         for i in range(4):
@@ -56,7 +54,6 @@ class DashboardFrame(ctk.CTkFrame):
             cards_frame, 3, "⚠️ Phiếu quá hạn", "0", "#d9534f"
         )
 
-        # Bảng hoạt động mượn trả gần đây
         recent_lbl = ctk.CTkLabel(
             self,
             text="📌 Hoạt động Mượn - Trả gần đây",
@@ -165,7 +162,6 @@ class MainView(ctk.CTkFrame):
         self.switch_tab("dashboard")
 
     def _build_layout(self):
-        # 1. Sidebar bên trái
         self.sidebar = ctk.CTkFrame(self, width=240, corner_radius=0)
         self.sidebar.pack(side="left", fill="y")
         self.sidebar.pack_propagate(False)
@@ -177,7 +173,7 @@ class MainView(ctk.CTkFrame):
         )
         brand_lbl.pack(pady=(24, 6), padx=20, anchor="w")
 
-        # Thẻ thông tin người đăng nhập
+
         user_card = ctk.CTkFrame(self.sidebar, corner_radius=10)
         user_card.pack(fill="x", padx=16, pady=(6, 20))
 
@@ -197,8 +193,6 @@ class MainView(ctk.CTkFrame):
             text_color=("gray40", "gray70"),
             anchor="w",
         ).pack(fill="x", padx=12, pady=(0, 8))
-
-        # Các nút điều hướng theo quyền
         reader_label = "👥  Quản lý Độc giả" if is_admin else "👥  Tra cứu Độc giả"
         menu_items = [
             ("dashboard", "🏠  Tổng quan"),
@@ -225,7 +219,6 @@ class MainView(ctk.CTkFrame):
             btn.pack(fill="x", padx=16, pady=4)
             self.nav_buttons[key] = btn
 
-        # Nút Đăng xuất ở cuối Sidebar
         logout_btn = ctk.CTkButton(
             self.sidebar,
             text="🚪 Đăng xuất",
@@ -236,7 +229,7 @@ class MainView(ctk.CTkFrame):
         )
         logout_btn.pack(side="bottom", fill="x", padx=16, pady=(8, 20))
 
-        # 2. Vùng hiển thị nội dung chính bên phải
+
         self.content_area = ctk.CTkFrame(self, fg_color="transparent")
         self.content_area.pack(side="left", fill="both", expand=True, padx=20, pady=18)
 

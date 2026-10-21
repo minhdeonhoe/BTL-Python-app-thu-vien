@@ -4,7 +4,6 @@ import customtkinter as ctk
 
 
 def center_window(window, width: int, height: int):
-    """Căn giữa cửa sổ trên màn hình"""
     window.update_idletasks()
     screen_width = window.winfo_screenwidth()
     screen_height = window.winfo_screenheight()
@@ -17,8 +16,14 @@ def format_date(val) -> str:
     if not val:
         return ""
     if isinstance(val, (date, datetime)):
-        return val.strftime("%Y-%m-%d")
-    return str(val)
+        return val.strftime("%d-%m-%Y")
+    val_str = str(val).strip()
+    for fmt in ("%Y-%m-%d", "%Y-%m-%d %H:%M:%S", "%Y-%m-%d %H:%M:%S.%f", "%d/%m/%Y"):
+        try:
+            return datetime.strptime(val_str[:19], fmt).strftime("%d-%m-%Y")
+        except ValueError:
+            continue
+    return val_str
 
 
 def format_currency(amount) -> str:
@@ -31,7 +36,7 @@ def format_currency(amount) -> str:
 
 
 def apply_treeview_style():
-    """Tùy chỉnh giao diện bảng ttk.Treeview đồng bộ với CustomTkinter"""
+   
     style = ttk.Style()
     style.theme_use("clam")
 
@@ -79,17 +84,7 @@ def apply_treeview_style():
     )
     return row_alt
 
-
-# ==========================================================
-# Sửa lỗi chữ bị IN ĐẬM / NỔI LÊN khi gõ tiếng Việt trên Windows
-# ----------------------------------------------------------
-# Nguyên nhân: Khi gõ bằng bộ gõ có khung soạn chữ (IME composition),
-# Tkinter không đặt font cho khung chữ đang gõ dở, nên Windows dùng font
-# mặc định "System" (vốn in đậm, to hơn). Hàm dưới đây gọi Win32 API
-# ImmSetCompositionFontW để khung chữ đang gõ dùng đúng font của ô nhập.
-# ==========================================================
 def enable_ime_font_fix(root):
-    """Đồng bộ font của khung chữ đang gõ (IME) với font của ô nhập. Chỉ có tác dụng trên Windows."""
     import sys
 
     if sys.platform != "win32":
@@ -146,7 +141,6 @@ def enable_ime_font_fix(root):
         except Exception:
             return
 
-        # Kích thước âm = pixel, dương = point -> quy đổi sang pixel theo DPI màn hình
         if size < 0:
             pixel_height = -size
         else:
@@ -154,12 +148,11 @@ def enable_ime_font_fix(root):
 
         lf = LOGFONTW()
         lf.lfHeight = -pixel_height
-        lf.lfWeight = FW_NORMAL  # Chữ thường, không in đậm
+        lf.lfWeight = FW_NORMAL  
         lf.lfCharSet = DEFAULT_CHARSET
         lf.lfQuality = CLEARTYPE_QUALITY
         lf.lfFaceName = str(family)[:31]
 
-        # Áp dụng cho cả ô nhập và cửa sổ cha (tùy bộ gõ gắn IME context vào đâu)
         targets = {hwnd}
         root_hwnd = user32.GetAncestor(hwnd, GA_ROOT)
         if root_hwnd:
@@ -171,6 +164,5 @@ def enable_ime_font_fix(root):
                 imm32.ImmSetCompositionFontW(himc, ctypes.byref(lf))
                 imm32.ImmReleaseContext(target, himc)
 
-    # CTkEntry / CTkComboBox bên trong đều dùng tkinter.Entry -> bind theo class "Entry"
     root.bind_class("Entry", "<FocusIn>", _apply_ime_font, add="+")
 

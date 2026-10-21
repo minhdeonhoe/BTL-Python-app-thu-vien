@@ -6,7 +6,6 @@ from views.main_view import MainView
 
 
 class LibraryApp(ctk.CTk):
-    """Cửa sổ gốc điều phối luồng màn hình Đăng nhập <-> Màn hình chính"""
 
     def __init__(self):
         super().__init__()

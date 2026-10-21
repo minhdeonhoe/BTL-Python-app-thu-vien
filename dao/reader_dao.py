@@ -4,7 +4,6 @@ from models.reader import Reader
 
 
 class ReaderDAO:
-    """Tầng truy cập dữ liệu (DAO) cho bảng Readers"""
 
     @staticmethod
     def get_all(keyword: str = "", status_filter: str = "Tất cả") -> List[Reader]:
@@ -31,7 +30,7 @@ class ReaderDAO:
             query += " AND status LIKE ?"
             params.append(f"%{status_filter}%")
 
-        query += " ORDER BY reader_id DESC"
+        query += " ORDER BY reader_id ASC"
 
         readers = []
         with get_db_cursor() as cursor:
