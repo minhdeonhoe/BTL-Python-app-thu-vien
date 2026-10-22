@@ -193,7 +193,7 @@ class MainView(ctk.CTkFrame):
             text_color=("gray40", "gray70"),
             anchor="w",
         ).pack(fill="x", padx=12, pady=(0, 8))
-        reader_label = "👥  Quản lý Độc giả" if is_admin else "👥  Tra cứu Độc giả"
+        reader_label = "👥  Quản lý Độc giả"
         menu_items = [
             ("dashboard", "🏠  Tổng quan"),
             ("books", "📘  Quản lý Sách"),

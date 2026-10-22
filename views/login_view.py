@@ -10,12 +10,11 @@ class LoginView(ctk.CTkFrame):
         self._build_ui()
 
     def _build_ui(self):
-        # Khung thẻ đăng nhập ở chính giữa
         card = ctk.CTkFrame(self, width=420, height=470, corner_radius=16)
         card.place(relx=0.5, rely=0.5, anchor="center")
         card.pack_propagate(False)
 
-        # Tiêu đề & biểu tượng
+       
         title_lbl = ctk.CTkLabel(
             card,
             text="📚 Hệ thống Thư viện",
@@ -31,7 +30,7 @@ class LoginView(ctk.CTkFrame):
         )
         subtitle_lbl.pack(pady=(0, 28))
 
-        # Tài khoản
+     
         user_lbl = ctk.CTkLabel(
             card,
             text="Tên đăng nhập",
@@ -48,7 +47,7 @@ class LoginView(ctk.CTkFrame):
         )
         self.username_entry.pack(fill="x", padx=40, pady=(0, 16))
 
-        # Mật khẩu
+       
         pwd_lbl = ctk.CTkLabel(
             card,
             text="Mật khẩu",
@@ -66,7 +65,6 @@ class LoginView(ctk.CTkFrame):
         )
         self.password_entry.pack(fill="x", padx=40, pady=(0, 24))
 
-        # Nút Đăng nhập
         login_btn = ctk.CTkButton(
             card,
             text="Đăng nhập",

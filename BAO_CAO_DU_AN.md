@@ -17,7 +17,7 @@ Xây dựng phần mềm Desktop **Hệ thống Quản lý Thư viện** có gia
 
 ### 1.3. Các chức năng chính của sản phẩm
 1. **Xác thực và Phân quyền người dùng:**
-   - Đăng nhập bảo mật theo vai trò (`Admin` và `Librarian`).
+   - Đăng nhập bảo mật theo vai trò (`Admin` và `Librarian`): Thủ thư (`Librarian`) có đầy đủ quyền quản lý Sách, quản lý Độc giả và quản lý Mượn – Trả sách; Quản trị viên (`Admin`) có thêm quyền quản lý Tài khoản nhân sự.
    - Cơ chế bảo vệ **1 Admin duy nhất**: Tài khoản Admin không thể tự hạ quyền hoặc tự khóa tài khoản của chính mình; chỉ Admin mới được phép quản lý danh sách Thủ thư.
 2. **Bảng điều khiển Tổng quan (Dashboard):**
    - Thống kê trực quan theo thời gian thực 5 chỉ số: Tổng đầu sách, Sách sẵn có trên kệ, Độc giả đang hoạt động, Phiếu đang mượn và Phiếu quá hạn.
@@ -56,7 +56,7 @@ Thay vì viết toàn bộ giao diện và truy vấn SQL chung trong một tệ
 - **`config/database.py`**: Quản lý chuỗi kết nối SQL Server và Context Manager `get_db_cursor`.
 - **`models/`**: Định nghĩa 4 lớp thực thể dữ liệu: `User`, `Book`, `Reader`, `Borrow`.
 - **`dao/`**: Thực thi các truy vấn SQL tham số hóa (`user_dao.py`, `book_dao.py`, `reader_dao.py`, `borrow_dao.py`).
-- **`services/`**: Xử lý kiểm사 nghiệp vụ (`auth_service.py`, `book_service.py`, `reader_service.py`, `borrow_service.py`).
+- **`services/`**: Xử lý kiểm tra nghiệp vụ (`auth_service.py`, `book_service.py`, `reader_service.py`, `borrow_service.py`).
 - **`views/`**: Xây dựng giao diện người dùng (`login_view.py`, `main_view.py`, `book_view.py`, `reader_view.py`, `borrow_view.py`, `user_view.py`).
 - **`utils/helpers.py`**: Cung cấp hàm định dạng ngày `DD-MM-YYYY`, tiền tệ `VNĐ`, cấu hình bảng `Treeview` và vá lỗi font bộ gõ tiếng Việt.
 

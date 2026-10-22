@@ -10,7 +10,6 @@ from utils.helpers import apply_treeview_style, center_window, format_currency, 
 
 
 class CreateBorrowDialog(ctk.CTkToplevel):
-    """Hộp thoại lập phiếu mượn sách mới"""
 
     def __init__(self, master, current_user: User, on_save_callback):
         super().__init__(master)
@@ -46,7 +45,7 @@ class CreateBorrowDialog(ctk.CTkToplevel):
 
         input_font = ctk.CTkFont(family="Segoe UI", size=13, weight="normal")
 
-        # Tìm kiếm độc giả theo LIKE
+
         ctk.CTkLabel(form_grid, text="Tìm độc giả:", font=input_font).grid(row=0, column=0, sticky="w", pady=6, padx=(0, 12))
         self.reader_search_entry = ctk.CTkEntry(
             form_grid,
@@ -57,12 +56,10 @@ class CreateBorrowDialog(ctk.CTkToplevel):
         self.reader_search_entry.grid(row=0, column=1, sticky="ew", pady=6)
         self.reader_search_entry.bind("<KeyRelease>", lambda _: self._filter_readers())
 
-        # Chọn độc giả
         ctk.CTkLabel(form_grid, text="Chọn độc giả (*):", font=input_font).grid(row=1, column=0, sticky="w", pady=6, padx=(0, 12))
         self.reader_cb = ctk.CTkComboBox(form_grid, values=["Không có độc giả hoạt động"], height=34, font=input_font)
         self.reader_cb.grid(row=1, column=1, sticky="ew", pady=6)
 
-        # Tìm kiếm sách theo LIKE
         ctk.CTkLabel(form_grid, text="Tìm sách:", font=input_font).grid(row=2, column=0, sticky="w", pady=6, padx=(0, 12))
         self.book_search_entry = ctk.CTkEntry(
             form_grid,
@@ -73,19 +70,16 @@ class CreateBorrowDialog(ctk.CTkToplevel):
         self.book_search_entry.grid(row=2, column=1, sticky="ew", pady=6)
         self.book_search_entry.bind("<KeyRelease>", lambda _: self._filter_books())
 
-        # Chọn sách
         ctk.CTkLabel(form_grid, text="Chọn sách (*):", font=input_font).grid(row=3, column=0, sticky="w", pady=6, padx=(0, 12))
         self.book_cb = ctk.CTkComboBox(form_grid, values=["Không có sách sẵn sàng"], height=34, font=input_font)
         self.book_cb.grid(row=3, column=1, sticky="ew", pady=6)
 
-        # Hạn trả (mặc định +14 ngày)
-        default_due = (date.today() + timedelta(days=14)).strftime("%d-%m-%Y")
+        default_due = (date.today() + timedelta(days=30)).strftime("%d-%m-%Y")
         ctk.CTkLabel(form_grid, text="Hạn trả (DD-MM-YYYY):", font=input_font).grid(row=4, column=0, sticky="w", pady=6, padx=(0, 12))
         self.due_entry = ctk.CTkEntry(form_grid, height=34, font=input_font)
         self.due_entry.insert(0, default_due)
         self.due_entry.grid(row=4, column=1, sticky="ew", pady=6)
 
-        # Ghi chú
         ctk.CTkLabel(form_grid, text="Ghi chú:", font=input_font).grid(row=5, column=0, sticky="w", pady=6, padx=(0, 12))
         self.note_entry = ctk.CTkEntry(
             form_grid,
@@ -232,7 +226,7 @@ class ReturnBookDialog(ctk.CTkToplevel):
 
         input_font = ctk.CTkFont(family="Segoe UI", size=13, weight="normal")
 
-        # Trạng thái cập nhật
+       
         ctk.CTkLabel(form_grid, text="Trạng thái xử lý:", font=input_font).grid(row=0, column=0, sticky="w", pady=8, padx=(0, 12))
         self.status_cb = ctk.CTkComboBox(
             form_grid,
@@ -243,7 +237,7 @@ class ReturnBookDialog(ctk.CTkToplevel):
         self.status_cb.set("Đã trả")
         self.status_cb.grid(row=0, column=1, sticky="ew", pady=8)
 
-        # Tính tiền phạt gợi ý nếu quá hạn (5,000đ / ngày trễ)
+
         suggested_fine = float(self.borrow.fine_amount or 0)
         if suggested_fine == 0 and self.borrow.due_date and date.today() > self.borrow.due_date:
             overdue_days = (date.today() - self.borrow.due_date).days
@@ -352,7 +346,7 @@ class BorrowView(ctk.CTkFrame):
         )
         create_btn.pack(side="right")
 
-        # Thanh tìm kiếm & lọc
+      
         filter_bar = ctk.CTkFrame(self, corner_radius=10)
         filter_bar.pack(fill="x", pady=(0, 12), ipady=6)
 
@@ -399,7 +393,6 @@ class BorrowView(ctk.CTkFrame):
             command=self._reset_filters,
         ).pack(side="left")
 
-        # Bảng Treeview
         table_frame = ctk.CTkFrame(self, corner_radius=10)
         table_frame.pack(fill="both", expand=True)
 

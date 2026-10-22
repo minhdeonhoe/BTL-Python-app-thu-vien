@@ -307,7 +307,7 @@ class ReaderView(ctk.CTkFrame):
     def __init__(self, master, current_user: User):
         super().__init__(master, fg_color="transparent")
         self.current_user = current_user
-        self.is_admin = current_user.role == "Admin"
+        self.is_admin = True
         self.readers_cache = {}
         self._build_ui()
         self.load_data()
@@ -316,7 +316,7 @@ class ReaderView(ctk.CTkFrame):
         top_bar = ctk.CTkFrame(self, fg_color="transparent")
         top_bar.pack(fill="x", pady=(0, 12))
 
-        title_text = "👥 Quản lý độc giả" if self.is_admin else "👥 Tra cứu độc giả & lịch sử mượn"
+        title_text = "👥 Quản lý độc giả"
         title_lbl = ctk.CTkLabel(
             top_bar,
             text=title_text,
