@@ -201,7 +201,7 @@ class MainView(ctk.CTkFrame):
             ("borrows", "📋  Mượn - Trả sách"),
         ]
         if is_admin:
-            menu_items.append(("users", "🛡️  Quản lý Tài khoản"))
+            menu_items.append(("users", "🛡  Quản lý Tài khoản"))
 
         for key, label in menu_items:
             btn = ctk.CTkButton(
