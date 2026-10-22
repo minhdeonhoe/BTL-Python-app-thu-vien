@@ -195,7 +195,7 @@ class BorrowDAO:
                 stats["total_books"] = b_row[0] or 0
                 stats["available_books"] = b_row[1] or 0
 
-            cursor.execute("SELECT COUNT(*) FROM Readers WHERE is_active = 1")
+            cursor.execute("SELECT COUNT(*) FROM Readers WHERE is_active = 1 AND status = N'Hoạt động'")
             r_row = cursor.fetchone()
             if r_row:
                 stats["total_readers"] = r_row[0] or 0

@@ -4,7 +4,6 @@ from models.reader import Reader
 
 
 class ReaderService:
-    """Tầng xử lý nghiệp vụ quản lý Độc giả (chỉ gọi qua ReaderDAO)"""
 
     @staticmethod
     def get_all_readers(keyword: str = "", status_filter: str = "Tất cả") -> List[Reader]:
