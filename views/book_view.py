@@ -8,8 +8,6 @@ from utils.helpers import apply_treeview_style, center_window
 
 
 class BookFormDialog(ctk.CTkToplevel):
-    """Hộp thoại Thêm mới / Cập nhật thông tin sách"""
-
     def __init__(self, master, on_save_callback, book: Optional[Book] = None):
         super().__init__(master)
         self.on_save_callback = on_save_callback
@@ -70,8 +68,6 @@ class BookFormDialog(ctk.CTkToplevel):
             )
             entry.grid(row=idx, column=1, sticky="ew", pady=6)
             self.entries[attr_name] = entry
-
-        # Vị trí kệ: chỉ cho chọn trong 6 kệ mặc định
         shelf_row = len(fields)
         ctk.CTkLabel(
             form_grid,
@@ -212,7 +208,6 @@ class BookView(ctk.CTkFrame):
         self.load_data()
 
     def _build_ui(self):
-        # Thanh tiêu đề & nút chức năng
         top_bar = ctk.CTkFrame(self, fg_color="transparent")
         top_bar.pack(fill="x", pady=(0, 12))
 

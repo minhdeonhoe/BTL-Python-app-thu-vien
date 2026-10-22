@@ -6,8 +6,6 @@ from models.borrow import Borrow
 
 
 class BorrowService:
-    """Tầng xử lý nghiệp vụ Mượn - Trả sách (gọi qua BorrowDAO, ReaderDAO, BookDAO)"""
-
     @staticmethod
     def get_all_borrows(keyword: str = "", status_filter: str = "Tất cả") -> List[Borrow]:
         return BorrowDAO.get_all(keyword=keyword.strip(), status_filter=status_filter)
@@ -18,22 +16,21 @@ class BorrowService:
 
     @staticmethod
     def create_borrow(reader_id: int, book_id: int, user_id: int, due_date: str, note: str = "") -> None:
-        # 1. Kiểm tra độc giả qua ReaderDAO
         reader = ReaderDAO.get_by_id(reader_id)
         if not reader:
             raise ValueError("Không tìm thấy độc giả hợp lệ!")
         if reader.status != "Hoạt động":
             raise ValueError("Thẻ độc giả hiện đang bị khóa, không thể mượn sách!")
-
-        # 2. Kiểm tra tồn kho sách qua BookDAO
+        
+        
         book = BookDAO.get_by_id(book_id)
         if not book:
             raise ValueError("Không tìm thấy sách trong hệ thống!")
         if book.available_quantity <= 0:
             raise ValueError("Sách này đã hết bản có sẵn trong kho!")
-
-        # 3. Thực hiện tạo phiếu mượn và trừ kho qua BorrowDAO
         clean_note = note.strip() or None
+        
+        
         BorrowDAO.insert_borrow_and_decrease_stock(
             reader_id=reader_id,
             book_id=book_id,
