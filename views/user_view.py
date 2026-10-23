@@ -7,7 +7,6 @@ from utils.helpers import apply_treeview_style, center_window, format_date
 
 
 class UserFormDialog(ctk.CTkToplevel):
-    """Hộp thoại Thêm mới Thủ thư / Cập nhật thông tin tài khoản"""
 
     def __init__(self, master, current_user: User, on_save_callback, target_user: Optional[User] = None):
         super().__init__(master)
@@ -44,27 +43,27 @@ class UserFormDialog(ctk.CTkToplevel):
 
         input_font = ctk.CTkFont(family="Segoe UI", size=13, weight="normal")
 
-        # Username
+       
         ctk.CTkLabel(form_grid, text="Tên đăng nhập (*):", font=input_font).grid(row=0, column=0, sticky="w", pady=7, padx=(0, 12))
         self.username_entry = ctk.CTkEntry(form_grid, placeholder_text="VD: thuthu3", height=34, font=input_font)
         self.username_entry.grid(row=0, column=1, sticky="ew", pady=7)
 
-        # Password
+        
         ctk.CTkLabel(form_grid, text="Mật khẩu (*):", font=input_font).grid(row=1, column=0, sticky="w", pady=7, padx=(0, 12))
         self.password_entry = ctk.CTkEntry(form_grid, placeholder_text="Nhập mật khẩu", height=34, font=input_font)
         self.password_entry.grid(row=1, column=1, sticky="ew", pady=7)
 
-        # Họ và tên
+       
         ctk.CTkLabel(form_grid, text="Họ và tên (*):", font=input_font).grid(row=2, column=0, sticky="w", pady=7, padx=(0, 12))
         self.fullname_entry = ctk.CTkEntry(form_grid, placeholder_text="Nhập họ và tên nhân sự", height=34, font=input_font)
         self.fullname_entry.grid(row=2, column=1, sticky="ew", pady=7)
 
-        # Email
+       
         ctk.CTkLabel(form_grid, text="Email (*):", font=input_font).grid(row=3, column=0, sticky="w", pady=7, padx=(0, 12))
         self.email_entry = ctk.CTkEntry(form_grid, placeholder_text="VD: staff@gmail.com", height=34, font=input_font)
         self.email_entry.grid(row=3, column=1, sticky="ew", pady=7)
 
-        # Vai trò (Role) - Khóa chuyển quyền (Admin không được chuyển quyền của mình hoặc tạo thêm Admin)
+        
         ctk.CTkLabel(form_grid, text="Vai trò (Role):", font=input_font).grid(row=4, column=0, sticky="w", pady=7, padx=(0, 12))
         fixed_role = "Admin" if self.is_editing_admin else "Librarian"
         self.role_cb = ctk.CTkComboBox(form_grid, values=[fixed_role], height=34, font=input_font)
@@ -72,7 +71,7 @@ class UserFormDialog(ctk.CTkToplevel):
         self.role_cb.configure(state="disabled")
         self.role_cb.grid(row=4, column=1, sticky="ew", pady=7)
 
-        # Trạng thái tài khoản
+       
         ctk.CTkLabel(form_grid, text="Trạng thái:", font=input_font).grid(row=5, column=0, sticky="w", pady=7, padx=(0, 12))
         self.status_cb = ctk.CTkComboBox(form_grid, values=["Đang hoạt động", "Đã khóa"], height=34, font=input_font)
         self.status_cb.set("Đang hoạt động")
@@ -203,7 +202,7 @@ class UserView(ctk.CTkFrame):
         )
         add_btn.pack(side="right")
 
-        # Thanh tìm kiếm & lọc theo vai trò
+        
         filter_bar = ctk.CTkFrame(self, corner_radius=10)
         filter_bar.pack(fill="x", pady=(0, 12), ipady=6)
 
@@ -250,7 +249,6 @@ class UserView(ctk.CTkFrame):
             command=self._reset_filters,
         ).pack(side="left")
 
-        # Bảng danh sách tài khoản
         table_frame = ctk.CTkFrame(self, corner_radius=10)
         table_frame.pack(fill="both", expand=True)
 

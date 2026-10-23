@@ -41,7 +41,6 @@ class BorrowService:
 
     @staticmethod
     def return_book(borrow_id: int, new_status: str = "Đã trả", fine_amount: float = 0, note: str = "") -> None:
-        # 1. Kiểm tra phiếu mượn qua BorrowDAO
         borrow = BorrowDAO.get_by_id(borrow_id)
         if not borrow:
             raise ValueError("Không tìm thấy phiếu mượn!")
