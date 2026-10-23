@@ -4,7 +4,6 @@ from models.user import User
 
 
 class AuthService:
-    """Tầng xử lý nghiệp vụ xác thực và quản lý tài khoản hệ thống (1 Admin duy nhất & các Thủ thư)"""
 
     @staticmethod
     def login(username: str, password: str) -> Optional[User]:
@@ -51,8 +50,6 @@ class AuthService:
     def add_user(current_user: User, new_user: User) -> None:
         if current_user.role != "Admin":
             raise PermissionError("Chỉ Quản trị viên (Admin) mới có quyền thêm tài khoản!")
-
-        # Hệ thống chỉ có duy nhất 1 Admin, tài khoản tạo mới bắt buộc là Thủ thư (Librarian)
         if new_user.role == "Admin":
             raise ValueError("Hệ thống chỉ cho phép duy nhất 1 Admin! Chỉ được thêm tài khoản Thủ thư (Librarian).")
         new_user.role = "Librarian"
@@ -70,8 +67,6 @@ class AuthService:
         original_user = UserDAO.get_by_id(target_user.user_id)
         if not original_user:
             raise ValueError("Không tìm thấy tài khoản cần cập nhật!")
-
-        # Nếu là tài khoản Admin: không được chuyển quyền sang Librarian và không được khóa
         if original_user.role == "Admin" or target_user.user_id == current_user.user_id:
             if target_user.role != "Admin":
                 raise ValueError("Tài khoản Admin duy nhất không thể tự chuyển hoặc hạ quyền của mình!")

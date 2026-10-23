@@ -49,8 +49,6 @@ class BorrowService:
             raise ValueError("Phiếu mượn này đã được trả trước đó!")
         if fine_amount < 0:
             raise ValueError("Tiền phạt không được nhỏ hơn 0!")
-
-        # 2. Chỉ hoàn lại số lượng sách vào kho nếu trạng thái xử lý là 'Đã trả'
         restore_stock = new_status == "Đã trả"
         clean_note = note.strip() or None
 
