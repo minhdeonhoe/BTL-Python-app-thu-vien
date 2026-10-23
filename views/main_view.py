@@ -149,7 +149,7 @@ class DashboardFrame(ctk.CTkFrame):
 
 
 class MainView(ctk.CTkFrame):
-    """Khung giao diện chính gồm Sidebar điều hướng phân quyền theo Role và vùng nội dung động"""
+   
 
     def __init__(self, master, current_user: User, on_logout):
         super().__init__(master, fg_color="transparent")

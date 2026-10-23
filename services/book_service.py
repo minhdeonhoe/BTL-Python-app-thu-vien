@@ -9,7 +9,6 @@ class BookService:
 
     @staticmethod
     def normalize_location(location: str) -> str:
-        """Chuẩn hóa vị trí kệ (VD: 'Kệ A1', 'a1' -> 'A1')"""
         loc = (location or "").strip().upper()
         if loc.startswith("KỆ"):
             loc = loc[2:].strip()
